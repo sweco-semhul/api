@@ -41,7 +41,6 @@ function setup( config, backend, query ){
     // backend command
     var cmd = {
       index: config.indexName,
-      searchType: 'dfs_query_then_fetch',
       body: renderedQuery.body
     };
 
