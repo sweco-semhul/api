@@ -2,6 +2,7 @@
 
 const setup = require('../../../controller/coarse_reverse');
 const proxyquire =  require('proxyquire').noCallThru();
+const _  = require('lodash');
 
 module.exports.tests = {};
 
@@ -15,12 +16,13 @@ module.exports.tests.interface = (test, common) => {
 
 module.exports.tests.early_exit_conditions = (test, common) => {
   test('should_execute returning false should not call service', (t) => {
+    t.plan(2);
+
     const service = () => {
       throw Error('service should not have been called');
     };
 
-    const should_execute = () => { return false; };
-    const controller = setup(service, should_execute);
+    const controller = setup(service, _.constant(false));
 
     const req = {
       clean: {
@@ -30,14 +32,12 @@ module.exports.tests.early_exit_conditions = (test, common) => {
     };
 
     // verify that next was called
-    let next_was_called = false;
     const next = () => {
-      next_was_called = true;
+      t.pass('next() was called');
     };
 
     // passing res=undefined verifies that it wasn't interacted with
     t.doesNotThrow(controller.bind(null, req, undefined, next));
-    t.ok(next_was_called);
     t.end();
 
   });
@@ -46,38 +46,34 @@ module.exports.tests.early_exit_conditions = (test, common) => {
 
 module.exports.tests.error_conditions = (test, common) => {
   test('service error should log and call next', (t) => {
-    const service = (point, callback) => {
+    t.plan(3);
+
+    const service = (req, callback) => {
+      t.deepEquals(req, { clean: { layers: ['locality'] } } );
       callback('this is an error');
     };
 
     const logger = require('pelias-mock-logger')();
 
-    const should_execute = () => { return true; };
     const controller = proxyquire('../../../controller/coarse_reverse', {
       'pelias-logger': logger
-    })(service, should_execute);
+    })(service, _.constant(true));
 
     const req = {
       clean: {
-        layers: ['locality'],
-        point: {
-          lat: 12.121212,
-          lon: 21.212121
-        }
+        layers: ['locality']
       }
     };
 
     // verify that next was called
-    let next_was_called = false;
     const next = () => {
-      next_was_called = true;
+      t.pass('next() was called');
     };
 
     // passing res=undefined verifies that it wasn't interacted with
     controller(req, undefined, next);
 
     t.ok(logger.isErrorMessage('this is an error'));
-    t.ok(next_was_called);
     t.end();
 
   });
@@ -86,7 +82,11 @@ module.exports.tests.error_conditions = (test, common) => {
 
 module.exports.tests.success_conditions = (test, common) => {
   test('service returning results should use first entry for each layer', (t) => {
-    const service = (point, callback) => {
+    t.plan(4);
+
+    const service = (req, callback) => {
+      t.deepEquals(req, { clean: { layers: ['neighbourhood'] } } );
+
       const results = {
         neighbourhood: [
           {
@@ -144,27 +144,21 @@ module.exports.tests.success_conditions = (test, common) => {
 
     const logger = require('pelias-mock-logger')();
 
-    const should_execute = () => { return true; };
     const controller = proxyquire('../../../controller/coarse_reverse', {
       'pelias-logger': logger
-    })(service, should_execute);
+    })(service, _.constant(true));
 
     const req = {
       clean: {
-        layers: ['neighbourhood'],
-        point: {
-          lat: 12.121212,
-          lon: 21.212121
-        }
+        layers: ['neighbourhood']
       }
     };
 
     const res = { };
 
     // verify that next was called
-    let next_was_called = false;
     const next = () => {
-      next_was_called = true;
+      t.pass('next() was called');
     };
 
     controller(req, res, next);
@@ -216,7 +210,6 @@ module.exports.tests.success_conditions = (test, common) => {
             country_id: ['100'],
             country_a: ['xyz']
           },
-          alpha3: 'XYZ',
           center_point: {
             lat: 12.121212,
             lon: 21.212121
@@ -227,21 +220,22 @@ module.exports.tests.success_conditions = (test, common) => {
     };
 
     t.deepEquals(res, expected);
-
     t.notOk(logger.hasErrorMessages());
-    t.ok(next_was_called);
     t.end();
 
   });
 
   test('layers missing from results should be ignored', (t) => {
-    const service = (point, callback) => {
+    t.plan(4);
+
+    const service = (req, callback) => {
+      t.deepEquals(req, { clean: { layers: ['neighbourhood'] } } );
+
       const results = {
         neighbourhood: [
           {
             id: 10,
             name: 'neighbourhood name',
-            abbr: 'neighbourhood abbr',
             centroid: {
               lat: 12.121212,
               lon: 21.212121
@@ -256,27 +250,21 @@ module.exports.tests.success_conditions = (test, common) => {
 
     const logger = require('pelias-mock-logger')();
 
-    const should_execute = () => { return true; };
     const controller = proxyquire('../../../controller/coarse_reverse', {
       'pelias-logger': logger
-    })(service, should_execute);
+    })(service, _.constant(true));
 
     const req = {
       clean: {
-        layers: ['neighbourhood'],
-        point: {
-          lat: 12.121212,
-          lon: 21.212121
-        }
+        layers: ['neighbourhood']
       }
     };
 
     const res = { };
 
     // verify that next was called
-    let next_was_called = false;
     const next = () => {
-      next_was_called = true;
+      t.pass('next() was called');
     };
 
     controller(req, res, next);
@@ -299,7 +287,7 @@ module.exports.tests.success_conditions = (test, common) => {
           parent: {
             neighbourhood: ['neighbourhood name'],
             neighbourhood_id: ['10'],
-            neighbourhood_a: ['neighbourhood abbr']
+            neighbourhood_a: [null]
           },
           center_point: {
             lat: 12.121212,
@@ -311,15 +299,17 @@ module.exports.tests.success_conditions = (test, common) => {
     };
 
     t.deepEquals(res, expected);
-
     t.notOk(logger.hasErrorMessages());
-    t.ok(next_was_called);
     t.end();
 
   });
 
   test('most granular layer missing centroid should not set', (t) => {
-    const service = (point, callback) => {
+    t.plan(4);
+
+    const service = (req, callback) => {
+      t.deepEquals(req, { clean: { layers: ['neighbourhood'] } } );
+
       const results = {
         neighbourhood: [
           {
@@ -336,27 +326,21 @@ module.exports.tests.success_conditions = (test, common) => {
 
     const logger = require('pelias-mock-logger')();
 
-    const should_execute = () => { return true; };
     const controller = proxyquire('../../../controller/coarse_reverse', {
       'pelias-logger': logger
-    })(service, should_execute);
+    })(service, _.constant(true));
 
     const req = {
       clean: {
-        layers: ['neighbourhood'],
-        point: {
-          lat: 12.121212,
-          lon: 21.212121
-        }
+        layers: ['neighbourhood']
       }
     };
 
     const res = { };
 
     // verify that next was called
-    let next_was_called = false;
     const next = () => {
-      next_was_called = true;
+      t.pass('next() was called');
     };
 
     controller(req, res, next);
@@ -387,15 +371,17 @@ module.exports.tests.success_conditions = (test, common) => {
     };
 
     t.deepEquals(res, expected);
-
     t.notOk(logger.hasErrorMessages());
-    t.ok(next_was_called);
     t.end();
 
   });
 
   test('most granular layer missing bounding_box should not set', (t) => {
-    const service = (point, callback) => {
+    t.plan(4);
+
+    const service = (req, callback) => {
+      t.deepEquals(req, { clean: { layers: ['neighbourhood'] } } );
+
       const results = {
         neighbourhood: [
           {
@@ -415,27 +401,21 @@ module.exports.tests.success_conditions = (test, common) => {
 
     const logger = require('pelias-mock-logger')();
 
-    const should_execute = () => { return true; };
     const controller = proxyquire('../../../controller/coarse_reverse', {
       'pelias-logger': logger
-    })(service, should_execute);
+    })(service, _.constant(true));
 
     const req = {
       clean: {
-        layers: ['neighbourhood'],
-        point: {
-          lat: 12.121212,
-          lon: 21.212121
-        }
+        layers: ['neighbourhood']
       }
     };
 
     const res = { };
 
     // verify that next was called
-    let next_was_called = false;
     const next = () => {
-      next_was_called = true;
+      t.pass('next() was called');
     };
 
     controller(req, res, next);
@@ -471,7 +451,253 @@ module.exports.tests.success_conditions = (test, common) => {
     t.deepEquals(res, expected);
 
     t.notOk(logger.hasErrorMessages());
-    t.ok(next_was_called);
+    t.end();
+
+  });
+
+  test('no requested layers should use everything', (t) => {
+    // this test is used to test coarse reverse fallback for when non-coarse reverse
+    //  was requested but no non-coarse results were found
+
+    // by plan'ing the number of tests, we can verify that next() was called w/o
+    //  additional bookkeeping
+    t.plan(4);
+
+    const service = (req, callback) => {
+      const results = {
+        neighbourhood: [
+          {
+            id: 10,
+            name: 'neighbourhood name',
+            abbr: 'neighbourhood abbr'
+          }
+        ]
+      };
+
+      callback(undefined, results);
+    };
+
+    const logger = require('pelias-mock-logger')();
+
+    const controller = proxyquire('../../../controller/coarse_reverse', {
+      'pelias-logger': logger
+    })(service, _.constant(true));
+
+    const req = {
+      clean: {
+        layers: [],
+        point: {
+          lat: 12.121212,
+          lon: 21.212121
+        }
+      }
+    };
+
+    const res = { };
+
+    // verify that next was called
+    const next = () => {
+      t.pass('next() should have been called');
+    };
+
+    controller(req, res, next);
+
+    const expected = {
+      meta: {},
+      data: [
+        {
+          _id: '10',
+          _type: 'neighbourhood',
+          layer: 'neighbourhood',
+          source: 'whosonfirst',
+          source_id: '10',
+          name: {
+            'default': 'neighbourhood name'
+          },
+          phrase: {
+            'default': 'neighbourhood name'
+          },
+          parent: {
+            neighbourhood: ['neighbourhood name'],
+            neighbourhood_id: ['10'],
+            neighbourhood_a: ['neighbourhood abbr']
+          }
+        }
+      ]
+    };
+
+    t.deepEquals(req.clean.layers, [], 'req.clean.layers should be unmodified');
+    t.deepEquals(res, expected);
+    t.notOk(logger.hasErrorMessages());
+
+    t.end();
+
+  });
+
+  test('layers specifying only venue, address, or street should not exclude coarse results', (t) => {
+    // this test is used to test coarse reverse fallback for when non-coarse reverse
+    //  was requested but no non-coarse results were found
+    const non_coarse_layers = ['venue', 'address', 'street'];
+    const tests_per_non_coarse_layer = 4;
+
+    // by plan'ing the number of tests, we can verify that next() was called w/o
+    //  additional bookkeeping
+    t.plan(non_coarse_layers.length * tests_per_non_coarse_layer);
+
+    non_coarse_layers.forEach((non_coarse_layer) => {
+      const service = (req, callback) => {
+        const results = {
+          neighbourhood: [
+            {
+              id: 10,
+              name: 'neighbourhood name',
+              abbr: 'neighbourhood abbr'
+            }
+          ]
+        };
+
+        callback(undefined, results);
+      };
+
+      const logger = require('pelias-mock-logger')();
+
+      const controller = proxyquire('../../../controller/coarse_reverse', {
+        'pelias-logger': logger
+      })(service, _.constant(true));
+
+      const req = {
+        clean: {
+          layers: [non_coarse_layer],
+          point: {
+            lat: 12.121212,
+            lon: 21.212121
+          }
+        }
+      };
+
+      const res = { };
+
+      // verify that next was called
+      const next = () => {
+        t.pass('next() should have been called');
+      };
+
+      controller(req, res, next);
+
+      const expected = {
+        meta: {},
+        data: [
+          {
+            _id: '10',
+            _type: 'neighbourhood',
+            layer: 'neighbourhood',
+            source: 'whosonfirst',
+            source_id: '10',
+            name: {
+              'default': 'neighbourhood name'
+            },
+            phrase: {
+              'default': 'neighbourhood name'
+            },
+            parent: {
+              neighbourhood: ['neighbourhood name'],
+              neighbourhood_id: ['10'],
+              neighbourhood_a: ['neighbourhood abbr']
+            }
+          }
+        ]
+      };
+
+      t.deepEquals(req.clean.layers, [non_coarse_layer], 'req.clean.layers should be unmodified');
+      t.deepEquals(res, expected);
+      t.notOk(logger.hasErrorMessages());
+
+    });
+
+    t.end();
+
+  });
+
+  test('layers specifying venue, address, or street AND coarse layer should not exclude coarse results', (t) => {
+    // this test is used to test coarse reverse fallback for when non-coarse reverse
+    //  was requested but no non-coarse results were found
+    const non_coarse_layers = ['venue', 'address', 'street'];
+    const tests_per_non_coarse_layer = 4;
+
+    // by plan'ing the number of tests, we can verify that next() was called w/o
+    //  additional bookkeeping
+    t.plan(non_coarse_layers.length * tests_per_non_coarse_layer);
+
+    non_coarse_layers.forEach((non_coarse_layer) => {
+      const service = (req, callback) => {
+        const results = {
+          neighbourhood: [
+            {
+              id: 10,
+              name: 'neighbourhood name',
+              abbr: 'neighbourhood abbr'
+            }
+          ]
+        };
+
+        callback(undefined, results);
+      };
+
+      const logger = require('pelias-mock-logger')();
+
+      const controller = proxyquire('../../../controller/coarse_reverse', {
+        'pelias-logger': logger
+      })(service, _.constant(true));
+
+      const req = {
+        clean: {
+          layers: [non_coarse_layer, 'neighbourhood'],
+          point: {
+            lat: 12.121212,
+            lon: 21.212121
+          }
+        }
+      };
+
+      const res = { };
+
+      // verify that next was called
+      const next = () => {
+        t.pass('next() should have been called');
+      };
+
+      controller(req, res, next);
+
+      const expected = {
+        meta: {},
+        data: [
+          {
+            _id: '10',
+            _type: 'neighbourhood',
+            layer: 'neighbourhood',
+            source: 'whosonfirst',
+            source_id: '10',
+            name: {
+              'default': 'neighbourhood name'
+            },
+            phrase: {
+              'default': 'neighbourhood name'
+            },
+            parent: {
+              neighbourhood: ['neighbourhood name'],
+              neighbourhood_id: ['10'],
+              neighbourhood_a: ['neighbourhood abbr']
+            }
+          }
+        ]
+      };
+
+      t.deepEquals(req.clean.layers, [non_coarse_layer, 'neighbourhood'], 'req.clean.layers should be unmodified');
+      t.deepEquals(res, expected);
+      t.notOk(logger.hasErrorMessages());
+
+    });
+
     t.end();
 
   });
@@ -480,7 +706,11 @@ module.exports.tests.success_conditions = (test, common) => {
 
 module.exports.tests.failure_conditions = (test, common) => {
   test('service returning 0 results at the requested layer should return nothing', (t) => {
-    const service = (point, callback) => {
+    t.plan(4);
+
+    const service = (req, callback) => {
+      t.deepEquals(req, { clean: { layers: ['neighbourhood'] } } );
+
       // response without neighbourhood results
       const results = {
         borough: [
@@ -526,27 +756,21 @@ module.exports.tests.failure_conditions = (test, common) => {
 
     const logger = require('pelias-mock-logger')();
 
-    const should_execute = () => { return true; };
     const controller = proxyquire('../../../controller/coarse_reverse', {
       'pelias-logger': logger
-    })(service, should_execute);
+    })(service, _.constant(true));
 
     const req = {
       clean: {
-        layers: ['neighbourhood'],
-        point: {
-          lat: 12.121212,
-          lon: 21.212121
-        }
+        layers: ['neighbourhood']
       }
     };
 
     const res = { };
 
     // verify that next was called
-    let next_was_called = false;
     const next = () => {
-      next_was_called = true;
+      t.pass('next() was called');
     };
 
     controller(req, res, next);
@@ -557,9 +781,7 @@ module.exports.tests.failure_conditions = (test, common) => {
     };
 
     t.deepEquals(res, expected);
-
     t.notOk(logger.hasErrorMessages());
-    t.ok(next_was_called);
     t.end();
 
   });
