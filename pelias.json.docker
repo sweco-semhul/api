@@ -1,18 +1,39 @@
 {
+
   "esclient": {
+    "keepAlive": true,
+    "requestTimeout": "1200000",
     "hosts": [
       {
-        "env": "production",
         "protocol": "http",
-        "host": "pelias-data-container",
+        "host": "elasticsearch1",
         "port": 9200
-      },
-      {
-        "env": "production",
-        "protocol": "http",
-        "host": "pelias-data-container",
-        "port": 9300
       }
     ]
+  },
+
+  "api": {
+    "textAnalyzer": "libpostal"
+  },
+  "interpolation": {
+    "client": {
+      "adapter": "http",
+      "host": "http://localhost:9999"
+    }
+  },
+  "imports": {
+    "adminLookup": {
+      "enabled": false
+    },
+    "openstreetmap": {
+      "datapath": "/pelias/data",
+      "leveldbpath": "/tmp",
+      "import": [
+      {
+        "filename": "pam.pbf"
+      }
+      ],
+      "deduplicate": false
+    }
   }
 }
