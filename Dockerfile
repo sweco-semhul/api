@@ -1,5 +1,8 @@
-FROM node:4.6.0
-MAINTAINER Pelias
+# base image
+FROM pelias/libpostal_baseimage
+
+# maintainer information
+LABEL maintainer="pelias@mapzen.com"
 
 EXPOSE 3100
 
@@ -27,7 +30,7 @@ ENV WORK=/opt/pelias
 ENV HOME=/opt/pelias
 
 WORKDIR ${WORK}
-ADD . ${WORK}
+COPY . ${WORK}
 
 # Build and set permissions for arbitrary non-root user
 
@@ -36,11 +39,10 @@ RUN npm install -g node-gyp && npm install -g node-postal
 RUN npm install && \
   chmod -R a+rwX .
 
-ADD pelias.json.docker pelias.json
-
 # Don't run as root, because there's no reason to (https://docs.docker.com/engine/articles/dockerfile_best-practices/#user).
 # This also reveals permission problems on local Docker.
 RUN chown -R 9999:9999 ${WORK}
 USER 9999
 
-CMD npm start
+# start service
+CMD [ "npm", "start" ]

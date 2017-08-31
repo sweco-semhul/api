@@ -30,7 +30,7 @@ module.exports.tests.should_execute = (test, common) => {
       return false;
     };
 
-    const controller = placeholder(placeholder_service, should_execute);
+    const controller = placeholder(placeholder_service, true, should_execute);
 
     const req = { a: 1 };
     const res = { b: 2 };
@@ -52,7 +52,7 @@ module.exports.tests.should_execute = (test, common) => {
       callback(null, []);
     };
 
-    const controller = placeholder(placeholder_service, _.constant(true));
+    const controller = placeholder(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { b: 2 };
@@ -206,14 +206,16 @@ module.exports.tests.success = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { };
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '123',
@@ -285,8 +287,7 @@ module.exports.tests.success = (test, common) => {
               'default': 'name 3'
             },
             population: 4321,
-            popularity: 8765,
-            parent: { }
+            popularity: 8765
           }
         ]
       };
@@ -323,14 +324,16 @@ module.exports.tests.success = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { };
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '123',
@@ -348,8 +351,7 @@ module.exports.tests.success = (test, common) => {
             },
             phrase: {
               'default': 'name 1'
-            },
-            parent: { }
+            }
           }
         ]
       };
@@ -385,14 +387,16 @@ module.exports.tests.success = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { };
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '123',
@@ -407,8 +411,7 @@ module.exports.tests.success = (test, common) => {
             },
             phrase: {
               'default': 'name 1'
-            },
-            parent: { }
+            }
           }
         ]
       };
@@ -444,14 +447,16 @@ module.exports.tests.success = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { };
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '123',
@@ -464,8 +469,7 @@ module.exports.tests.success = (test, common) => {
             },
             phrase: {
               'default': 'name 1'
-            },
-            parent: { }
+            }
           }
         ]
       };
@@ -508,14 +512,16 @@ module.exports.tests.success = (test, common) => {
 
       const controller = proxyquire('../../../controller/placeholder', {
         'pelias-logger': logger
-      })(placeholder_service, _.constant(true));
+      })(placeholder_service, true, () => true);
 
       const req = { param1: 'param1 value' };
       const res = { };
 
       controller(req, res, () => {
         const expected_res = {
-          meta: {},
+          meta: {
+            query_type: 'fallback'
+          },
           data: [
             {
               _id: '456',
@@ -528,8 +534,7 @@ module.exports.tests.success = (test, common) => {
               },
               phrase: {
                 'default': 'name 2'
-              },
-              parent: { }
+              }
             }
           ]
         };
@@ -572,14 +577,16 @@ module.exports.tests.success = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { };
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '1',
@@ -596,8 +603,7 @@ module.exports.tests.success = (test, common) => {
             },
             phrase: {
               'default': 'name 1'
-            },
-            parent: { }
+            }
           }
         ]
       };
@@ -736,7 +742,7 @@ module.exports.tests.result_filtering = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = {
       param1: 'param1 value',
@@ -751,7 +757,9 @@ module.exports.tests.result_filtering = (test, common) => {
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '1',
@@ -768,8 +776,7 @@ module.exports.tests.result_filtering = (test, common) => {
             },
             phrase: {
               'default': 'name 1'
-            },
-            parent: { }
+            }
           },
           {
             _id: '10',
@@ -786,8 +793,142 @@ module.exports.tests.result_filtering = (test, common) => {
             },
             phrase: {
               'default': 'name 10'
+            }
+          }
+        ]
+      };
+
+      t.deepEquals(res, expected_res);
+      t.end();
+    });
+
+  });
+
+  test('when geometric_filters_apply is false, boundary.rect should not apply', (t) => {
+    const logger = require('pelias-mock-logger')();
+
+    const placeholder_service = (req, callback) => {
+      t.deepEqual(req, {
+        param1: 'param1 value',
+        clean: {
+          'boundary.rect.min_lat': -1,
+          'boundary.rect.max_lat': 1,
+          'boundary.rect.min_lon': -1,
+          'boundary.rect.max_lon': 1
+        }
+      });
+
+      const response = [
+        {
+          // inside bbox
+          id: 1,
+          name: 'name 1',
+          placetype: 'neighbourhood',
+          geom: {
+            lat: 0,
+            lon: 0
+          }
+        },
+        {
+          // outside bbox
+          id: 2,
+          name: 'name 2',
+          placetype: 'neighbourhood',
+          geom: {
+            lat: -2,
+            lon: 2
+          }
+        },
+        {
+          // outside bbox
+          id: 3,
+          name: 'name 3',
+          placetype: 'neighbourhood',
+          geom: {
+            lat: 2,
+            lon: -2
+          }
+        }
+      ];
+
+      callback(null, response);
+    };
+
+    const should_execute = (req, res) => {
+      return true;
+    };
+
+    const controller = proxyquire('../../../controller/placeholder', {
+      'pelias-logger': logger
+    })(placeholder_service, false, () => true);
+
+    const req = {
+      param1: 'param1 value',
+      clean: {
+        'boundary.rect.min_lat': -1,
+        'boundary.rect.max_lat': 1,
+        'boundary.rect.min_lon': -1,
+        'boundary.rect.max_lon': 1
+      }
+    };
+    const res = { };
+
+    controller(req, res, () => {
+      const expected_res = {
+        meta: {
+          query_type: 'fallback'
+        },
+        data: [
+          {
+            _id: '1',
+            _type: 'neighbourhood',
+            layer: 'neighbourhood',
+            source: 'whosonfirst',
+            source_id: '1',
+            center_point: {
+              lat: 0,
+              lon: 0
             },
-            parent: { }
+            name: {
+              'default': 'name 1'
+            },
+            phrase: {
+              'default': 'name 1'
+            }
+          },
+          {
+            _id: '2',
+            _type: 'neighbourhood',
+            layer: 'neighbourhood',
+            source: 'whosonfirst',
+            source_id: '2',
+            center_point: {
+              lat: -2,
+              lon: 2
+            },
+            name: {
+              'default': 'name 2'
+            },
+            phrase: {
+              'default': 'name 2'
+            }
+          },
+          {
+            _id: '3',
+            _type: 'neighbourhood',
+            layer: 'neighbourhood',
+            source: 'whosonfirst',
+            source_id: '3',
+            center_point: {
+              lat: 2,
+              lon: -2
+            },
+            name: {
+              'default': 'name 3'
+            },
+            phrase: {
+              'default': 'name 3'
+            }
           }
         ]
       };
@@ -921,7 +1062,7 @@ module.exports.tests.result_filtering = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = {
       param1: 'param1 value',
@@ -935,7 +1076,9 @@ module.exports.tests.result_filtering = (test, common) => {
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '1',
@@ -952,8 +1095,7 @@ module.exports.tests.result_filtering = (test, common) => {
             },
             phrase: {
               'default': 'name 1'
-            },
-            parent: { }
+            }
           },
           {
             _id: '10',
@@ -970,8 +1112,140 @@ module.exports.tests.result_filtering = (test, common) => {
             },
             phrase: {
               'default': 'name 10'
+            }
+          }
+        ]
+      };
+
+      t.deepEquals(res, expected_res);
+      t.end();
+    });
+
+  });
+
+  test('when geometric_filters_apply is false, boundary.circle should not apply', (t) => {
+    const logger = require('pelias-mock-logger')();
+
+    const placeholder_service = (req, callback) => {
+      t.deepEqual(req, {
+        param1: 'param1 value',
+        clean: {
+          'boundary.circle.lat': 0,
+          'boundary.circle.lon': 0,
+          'boundary.circle.radius': 500
+        }
+      });
+
+      const response = [
+        {
+          // inside circle
+          id: 1,
+          name: 'name 1',
+          placetype: 'neighbourhood',
+          geom: {
+            lat: 1,
+            lon: 1
+          }
+        },
+        {
+          // outside circle on +lon
+          id: 2,
+          name: 'name 2',
+          placetype: 'neighbourhood',
+          geom: {
+            lat: -45,
+            lon: 45
+          }
+        },
+        {
+          // outside bbox on +lat
+          id: 3,
+          name: 'name 3',
+          placetype: 'neighbourhood',
+          geom: {
+            lat: 45,
+            lon: -45
+          }
+        }
+      ];
+
+      callback(null, response);
+    };
+
+    const should_execute = (req, res) => {
+      return true;
+    };
+
+    const controller = proxyquire('../../../controller/placeholder', {
+      'pelias-logger': logger
+    })(placeholder_service, false, () => true);
+
+    const req = {
+      param1: 'param1 value',
+      clean: {
+        'boundary.circle.lat': 0,
+        'boundary.circle.lon': 0,
+        'boundary.circle.radius': 500
+      }
+    };
+    const res = { };
+
+    controller(req, res, () => {
+      const expected_res = {
+        meta: {
+          query_type: 'fallback'
+        },
+        data: [
+          {
+            _id: '1',
+            _type: 'neighbourhood',
+            layer: 'neighbourhood',
+            source: 'whosonfirst',
+            source_id: '1',
+            center_point: {
+              lat: 1,
+              lon: 1
             },
-            parent: { }
+            name: {
+              'default': 'name 1'
+            },
+            phrase: {
+              'default': 'name 1'
+            }
+          },
+          {
+            _id: '2',
+            _type: 'neighbourhood',
+            layer: 'neighbourhood',
+            source: 'whosonfirst',
+            source_id: '2',
+            center_point: {
+              lat: -45,
+              lon: 45
+            },
+            name: {
+              'default': 'name 2'
+            },
+            phrase: {
+              'default': 'name 2'
+            }
+          },
+          {
+            _id: '3',
+            _type: 'neighbourhood',
+            layer: 'neighbourhood',
+            source: 'whosonfirst',
+            source_id: '3',
+            center_point: {
+              lat: 45,
+              lon: -45
+            },
+            name: {
+              'default': 'name 3'
+            },
+            phrase: {
+              'default': 'name 3'
+            }
           }
         ]
       };
@@ -1056,7 +1330,7 @@ module.exports.tests.result_filtering = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = {
       param1: 'param1 value',
@@ -1072,7 +1346,9 @@ module.exports.tests.result_filtering = (test, common) => {
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '1',
@@ -1089,8 +1365,7 @@ module.exports.tests.result_filtering = (test, common) => {
             },
             phrase: {
               'default': 'name 1'
-            },
-            parent: { }
+            }
           },
           {
             _id: '3',
@@ -1107,8 +1382,7 @@ module.exports.tests.result_filtering = (test, common) => {
             },
             phrase: {
               'default': 'name 3'
-            },
-            parent: { }
+            }
           },
           {
             _id: '5',
@@ -1125,8 +1399,142 @@ module.exports.tests.result_filtering = (test, common) => {
             },
             phrase: {
               'default': 'name 5'
+            }
+          }
+        ]
+      };
+
+      t.deepEquals(res, expected_res);
+      t.ok(logger.isInfoMessage('[controller:placeholder] [result_count:3]'));
+      t.end();
+    });
+
+  });
+
+  test('if req.clean.parsed_text contains street, don\'t filter on anything', (t) => {
+    const logger = mock_logger();
+
+    const placeholder_service = (req, callback) => {
+      t.deepEqual(req, {
+        param1: 'param1 value',
+        clean: {
+          layers: ['neighbourhood'],
+          parsed_text: {
+            street: 'street value'
+          }
+        }
+      });
+
+      const response = [
+        {
+          id: 1,
+          name: 'name 1',
+          placetype: 'neighbourhood',
+          lineage: [ {} ],
+          geom: {
+            area: 1,
+            lat: 14.141414,
+            lon: 41.414141
+          }
+        },
+        {
+          id: 2,
+          name: 'name 2',
+          placetype: 'borough',
+          lineage: [ {} ],
+          geom: {
+            area: 2,
+            lat: 15.151515,
+            lon: 51.515151
+          }
+        },
+        {
+          id: 3,
+          name: 'name 3',
+          placetype: 'locality',
+          lineage: [ {} ],
+          geom: {
+            area: 3,
+            lat: 16.161616,
+            lon: 61.616161
+          }
+        }
+      ];
+
+      callback(null, response);
+    };
+
+    const controller = proxyquire('../../../controller/placeholder', {
+      'pelias-logger': logger
+    })(placeholder_service, true, () => true);
+
+    const req = {
+      param1: 'param1 value',
+      clean: {
+        layers: ['neighbourhood'],
+        parsed_text: {
+          street: 'street value'
+        }
+      }
+    };
+    const res = { };
+
+    controller(req, res, () => {
+      const expected_res = {
+        meta: {
+          query_type: 'fallback'
+        },
+        data: [
+          {
+            _id: '1',
+            _type: 'neighbourhood',
+            layer: 'neighbourhood',
+            source: 'whosonfirst',
+            source_id: '1',
+            center_point: {
+              lat: 14.141414,
+              lon: 41.414141
             },
-            parent: { }
+            name: {
+              'default': 'name 1'
+            },
+            phrase: {
+              'default': 'name 1'
+            }
+          },
+          {
+            _id: '2',
+            _type: 'borough',
+            layer: 'borough',
+            source: 'whosonfirst',
+            source_id: '2',
+            center_point: {
+              lat: 15.151515,
+              lon: 51.515151
+            },
+            name: {
+              'default': 'name 2'
+            },
+            phrase: {
+              'default': 'name 2'
+            }
+          },
+          {
+            _id: '3',
+            _type: 'locality',
+            layer: 'locality',
+            source: 'whosonfirst',
+            source_id: '3',
+            center_point: {
+              lat: 16.161616,
+              lon: 61.616161
+            },
+            name: {
+              'default': 'name 3'
+            },
+            phrase: {
+              'default': 'name 3'
+            }
           }
         ]
       };
@@ -1210,7 +1618,7 @@ module.exports.tests.result_filtering = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = {
       param1: 'param1 value',
@@ -1222,7 +1630,9 @@ module.exports.tests.result_filtering = (test, common) => {
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '1',
@@ -1278,6 +1688,178 @@ module.exports.tests.result_filtering = (test, common) => {
 
   });
 
+  test('when geometric_filters_apply is false, boundary.country should not apply', (t) => {
+    const logger = require('pelias-mock-logger')();
+
+    const placeholder_service = (req, callback) => {
+      t.deepEqual(req, {
+        param1: 'param1 value',
+        clean: {
+          'boundary.country': 'ABC'
+        }
+      });
+
+      const response = [
+        {
+          id: 1,
+          name: 'name 1',
+          placetype: 'locality',
+          lineage: [
+            {
+              country: {
+                id: 1,
+                name: 'country name 1',
+                abbr: 'ABC'
+              }
+            },
+            {
+              country: {
+                id: 2,
+                name: 'country name 2',
+                abbr: 'DEF'
+              }
+            }
+          ],
+          geom: {
+            lat: 14.141414,
+            lon: 41.414141
+          }
+        },
+        {
+          id: 3,
+          name: 'name 3',
+          placetype: 'locality',
+          lineage: [
+            {
+              country: {
+                id: 3,
+                name: 'country name 3',
+                abbr: 'ABC'
+              }
+            }
+          ],
+          geom: {
+            lat: 15.151515,
+            lon: 51.515151
+          }
+        },
+        {
+          id: 4,
+          name: 'name 4',
+          placetype: 'locality',
+          lineage: [
+            {
+              country: {
+                id: 4,
+                name: 'country name 4',
+                abbr: 'GHI'
+              }
+            }
+          ],
+          geom: {
+            lat: 16.161616,
+            lon: 61.616161
+          }
+        }
+      ];
+
+      callback(null, response);
+    };
+
+    const controller = proxyquire('../../../controller/placeholder', {
+      'pelias-logger': logger
+    })(placeholder_service, false, () => true);
+
+    const req = {
+      param1: 'param1 value',
+      clean: {
+        'boundary.country': 'ABC'
+      }
+    };
+    const res = { };
+
+    controller(req, res, () => {
+      const expected_res = {
+        meta: {
+          query_type: 'fallback'
+        },
+        data: [
+          {
+            _id: '1',
+            _type: 'locality',
+            layer: 'locality',
+            source: 'whosonfirst',
+            source_id: '1',
+            center_point: {
+              lat: 14.141414,
+              lon: 41.414141
+            },
+            name: {
+              'default': 'name 1'
+            },
+            phrase: {
+              'default': 'name 1'
+            },
+            parent: {
+              country: ['country name 1', 'country name 2'],
+              country_id: ['1', '2'],
+              country_a: ['ABC', 'DEF']
+            }
+          },
+          {
+            _id: '3',
+            _type: 'locality',
+            layer: 'locality',
+            source: 'whosonfirst',
+            source_id: '3',
+            center_point: {
+              lat: 15.151515,
+              lon: 51.515151
+            },
+            name: {
+              'default': 'name 3'
+            },
+            phrase: {
+              'default': 'name 3'
+            },
+            parent: {
+              country: ['country name 3'],
+              country_id: ['3'],
+              country_a: ['ABC']
+            }
+          },
+          {
+            _id: '4',
+            _type: 'locality',
+            layer: 'locality',
+            source: 'whosonfirst',
+            source_id: '4',
+            center_point: {
+              lat: 16.161616,
+              lon: 61.616161
+            },
+            name: {
+              'default': 'name 4'
+            },
+            phrase: {
+              'default': 'name 4'
+            },
+            parent: {
+              country: ['country name 4'],
+              country_id: ['4'],
+              country_a: ['GHI']
+            }
+          }
+        ]
+      };
+
+      t.deepEquals(res, expected_res);
+      t.ok(logger.isInfoMessage('[controller:placeholder] [result_count:3]'));
+      t.end();
+    });
+
+  });
+
 };
 
 module.exports.tests.lineage_errors = (test, common) => {
@@ -1318,14 +1900,16 @@ module.exports.tests.lineage_errors = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { };
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '123',
@@ -1390,14 +1974,16 @@ module.exports.tests.lineage_errors = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { };
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '123',
@@ -1461,14 +2047,16 @@ module.exports.tests.lineage_errors = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { };
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '123',
@@ -1519,14 +2107,16 @@ module.exports.tests.geometry_errors = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { };
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '123',
@@ -1539,8 +2129,7 @@ module.exports.tests.geometry_errors = (test, common) => {
             },
             phrase: {
               'default': 'name 1'
-            },
-            parent: {}
+            }
           }
         ]
       };
@@ -1577,14 +2166,16 @@ module.exports.tests.centroid_errors = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { };
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '123',
@@ -1598,8 +2189,7 @@ module.exports.tests.centroid_errors = (test, common) => {
             },
             phrase: {
               'default': 'name 1'
-            },
-            parent: { }
+            }
           }
         ]
       };
@@ -1636,14 +2226,16 @@ module.exports.tests.centroid_errors = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = { param1: 'param1 value' };
     const res = { };
 
     controller(req, res, () => {
       const expected_res = {
-        meta: {},
+        meta: {
+          query_type: 'fallback'
+        },
         data: [
           {
             _id: '123',
@@ -1657,8 +2249,7 @@ module.exports.tests.centroid_errors = (test, common) => {
             },
             phrase: {
               'default': 'name 1'
-            },
-            parent: { }
+            }
           }
         ]
       };
@@ -1705,14 +2296,16 @@ module.exports.tests.boundingbox_errors = (test, common) => {
 
       const controller = proxyquire('../../../controller/placeholder', {
         'pelias-logger': logger
-      })(placeholder_service, _.constant(true));
+      })(placeholder_service, true, () => true);
 
       const req = { param1: 'param1 value' };
       const res = { };
 
       controller(req, res, () => {
         const expected_res = {
-          meta: {},
+          meta: {
+            query_type: 'fallback'
+          },
           data: [
             {
               _id: '123',
@@ -1729,8 +2322,7 @@ module.exports.tests.boundingbox_errors = (test, common) => {
               },
               phrase: {
                 'default': 'name 1'
-              },
-              parent: { }
+              }
             }
           ]
         };
@@ -1756,7 +2348,7 @@ module.exports.tests.error_conditions = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = {
       errors: []
@@ -1785,7 +2377,7 @@ module.exports.tests.error_conditions = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = {
       errors: []
@@ -1810,7 +2402,7 @@ module.exports.tests.error_conditions = (test, common) => {
 
     const controller = proxyquire('../../../controller/placeholder', {
       'pelias-logger': logger
-    })(placeholder_service, _.constant(true));
+    })(placeholder_service, true, () => true);
 
     const req = {
       errors: []

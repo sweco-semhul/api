@@ -1,4 +1,3 @@
-
 var app = require('express')();
 
 var peliasConfig = require( 'pelias-config' ).generate(require('./schema'));
@@ -16,8 +15,9 @@ app.use( require('./middleware/jsonp') );
 
 /** ----------------------- routes ----------------------- **/
 
-var legacy = require('./routes/legacy');
-legacy.addRoutes(app, peliasConfig.api);
+
+var defaultRoutes = require('./routes/default');
+defaultRoutes.addRoutes(app);
 
 var v1 = require('./routes/v1');
 v1.addRoutes(app, peliasConfig);
