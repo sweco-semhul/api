@@ -83,7 +83,7 @@
     "tap-dot": "1.0.5",
     "tape": "^4.5.1",
     "tmp": "0.0.33",
-    "uglify-js": "^3.0.4"
+    "uglify-js": "^3.1.0"
   },
   "pre-commit": [
     "lint",
