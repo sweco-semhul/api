@@ -26,7 +26,8 @@ var SOURCE_ALIASES = {
   'osm': ['openstreetmap'],
   'oa': ['openaddresses'],
   'gn': ['geonames'],
-  'wof': ['whosonfirst']
+  'wof': ['whosonfirst'],
+  'pam': ['pam']
 };
 
 /*
