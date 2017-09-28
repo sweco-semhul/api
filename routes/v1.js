@@ -68,6 +68,11 @@ var postProc = {
   sortResponseData: require('../middleware/sortResponseData')
 };
 
+var pam = {
+  // preMapper: require('../middleware/preMapper'),
+  postMapper: require('../middleware/postMapper')
+};
+
 // predicates that drive whether controller/search runs
 const hasResponseData = require('../controller/predicates/has_response_data');
 const hasRequestErrors = require('../controller/predicates/has_request_errors');
@@ -280,6 +285,7 @@ function addRoutes(app, peliasConfig) {
       postProc.changeLanguage(changeLanguageService, changeLanguageShouldExecute),
       postProc.assignLabels(),
       postProc.geocodeJSON(peliasConfig.api, base),
+			pam.postMapper(),
       postProc.sendJSON
     ]),
     structured: createRouter([

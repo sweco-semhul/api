@@ -10,7 +10,6 @@ var exceptionRegexList = exceptions.map( function( exceptionName ){
 });
 
 function sendJSONResponse(req, res, next) {
-
   // do nothing if no result data set
   if (!res || !check.object(res.body) || !check.object(res.body.geocoding)) {
     return next();
@@ -66,7 +65,7 @@ function sendJSONResponse(req, res, next) {
       }
     });
   }
-
+	
   // respond
   return res.status(statusCode).json(res.body);
 }
