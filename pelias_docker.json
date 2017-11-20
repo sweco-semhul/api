@@ -1,39 +1,22 @@
-{
-
+{  
   "esclient": {
     "keepAlive": true,
     "requestTimeout": "1200000",
     "hosts": [
       {
         "protocol": "http",
-        "host": "pgm-address-suggest-elasticsearch",
+        "host": "air-elasticsearch",
         "port": 9200
       }
     ]
   },
 
   "api": {
-    "textAnalyzer": "libpostal"
-  },
-  "interpolation": {
-    "client": {
-      "adapter": "http",
-      "host": "http://localhost:9999"
-    }
-  },
-  "imports": {
-    "adminLookup": {
-      "enabled": false
-    },
-    "openstreetmap": {
-      "datapath": "/data/pam/",
-      "leveldbpath": "/tmp",
-      "import": [
-      {
-        "filename": "address_aalborg.pbf"
-      }
-      ],
-      "deduplicate": false
-    }
+    "accessLog": "common",
+    "textAnalyzer": "libpostal",
+    "host": "{HOST}",
+    "indexName": "pelias",
+    "version": "1.0"
   }
 }
+  

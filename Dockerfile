@@ -28,7 +28,9 @@ RUN npm install && \
 RUN chown -R 9999:9999 ${WORK}
 USER 9999
 
-COPY ./pelias_docker.json /code/pelias.json
+COPY ./pelias_docker.json ${WORK}/pelias.json
+
+ENV API_HOST_URL example.com
 
 # start service
-CMD [ "npm", "start" ]
+CMD [ "start.sh" ]
