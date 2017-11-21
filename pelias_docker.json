@@ -16,7 +16,7 @@
     "textAnalyzer": "libpostal",
     "host": "{HOST}",
     "indexName": "pelias",
-    "version": "1.0"
+    "version": "1.0 - v0.0.3-pn.api"
   }
 }
   
