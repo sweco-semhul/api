@@ -6,6 +6,9 @@ LABEL maintainer="pelias@mapzen.com"
 
 EXPOSE 3100
 
+# Make sure host is set to enable exposure of app outside of docker container
+ENV HOST 0.0.0.0
+
 # Where the app is built and run inside the docker fs
 ENV WORK=/opt/pelias
 
@@ -25,5 +28,9 @@ RUN npm install && \
 RUN chown -R 9999:9999 ${WORK}
 USER 9999
 
+COPY ./pelias_docker.json ${WORK}/pelias.json
+
+ENV API_HOST_URL example.com
+
 # start service
-CMD [ "npm", "start" ]
+CMD [ "start.sh" ]

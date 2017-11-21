@@ -35,6 +35,9 @@ typings/
 # Optional npm cache directory
 .npm
 
+# npm lock file
+package.json-lock
+
 # Optional eslint cache
 .eslintcache
 

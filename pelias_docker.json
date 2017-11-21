@@ -1,0 +1,22 @@
+{  
+  "esclient": {
+    "keepAlive": true,
+    "requestTimeout": "1200000",
+    "hosts": [
+      {
+        "protocol": "http",
+        "host": "air-elasticsearch",
+        "port": 9200
+      }
+    ]
+  },
+
+  "api": {
+    "accessLog": "common",
+    "textAnalyzer": "libpostal",
+    "host": "{HOST}",
+    "indexName": "pelias",
+    "version": "1.0"
+  }
+}
+  
