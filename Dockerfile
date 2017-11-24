@@ -30,7 +30,10 @@ USER 9999
 
 COPY ./pelias_docker.json ${WORK}/pelias.json
 
-ENV API_HOST_URL example.com
+ENV API_HOST_URL localhost
+ENV ENV=dev
+ENV PELIAS_CONFIG ${WORK}/pelias.json
+
 
 # start service
-CMD [ "start.sh" ]
+CMD [ "./start.sh" ]
