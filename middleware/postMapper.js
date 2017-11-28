@@ -15,7 +15,8 @@ function postMapper(req, res, next) {
   if (!res || !res.body) {
     return next();
   }
-
+/*
+  Inactivated since params not handled on incomming request
   var map = mapperConfig.pamMap;
 
   // Map each OSM property to corresponding PAM property
@@ -30,7 +31,7 @@ function postMapper(req, res, next) {
      	}
     }
   });
-
+*/
   next();
 }
 
