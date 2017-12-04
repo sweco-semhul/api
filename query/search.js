@@ -24,6 +24,7 @@ fallbackQuery.filter( peliasQuery.view.boundary_rect );
 fallbackQuery.filter( peliasQuery.view.sources );
 fallbackQuery.filter( peliasQuery.view.layers );
 fallbackQuery.filter( peliasQuery.view.categories );
+fallbackQuery.filter( function() { return { 'range': { 'address_parts.pam_active_to': { 'gte': 'now' }}}; });
 // --------------------------------
 
 /**

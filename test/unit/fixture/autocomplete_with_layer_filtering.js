@@ -57,7 +57,15 @@ module.exports = {
         'terms': {
           'layer': ['country']
         }
-      }]
+      },
+        {
+          'range': {
+            'address_parts.pam_active_to': {
+              'gte': 'now'
+            }
+          }
+        }
+      ]
     }
   },
   'sort': [ '_score' ],

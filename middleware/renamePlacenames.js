@@ -8,7 +8,18 @@ const ADDRESS_PROPS = [
   { name: 'unit',   newName: 'unit' },
   { name: 'number', newName: 'housenumber' },
   { name: 'zip',    newName: 'postalcode', transform: (value) => { return [value]; } },
-  { name: 'street', newName: 'street' }
+  { name: 'street', newName: 'street' },
+  { name: 'pam_address_category_id',      newName: 'pam_address_category_id' },
+  { name: 'pam_address_category',         newName: 'pam_address_category' },
+  { name: 'pam_active_from',              newName: 'pam_active_from' },
+  { name: 'pam_active_to',                newName: 'pam_active_to' },
+  { name: 'pam_household_type_id',        newName: 'pam_household_type_id' },
+  { name: 'pam_household_type',           newName: 'pam_household_type' },
+  { name: 'pam_is_internally_created',    newName: 'pam_is_internally_created' },
+  { name: 'pam_danish_pain',              newName: 'pam_danish_pain' },
+  { name: 'pam_mod_adresse_adresse_idnr', newName: 'pam_mod_adresse_adresse_idnr' },
+  { name: 'pam_lantmat_uuid',             newName: 'pam_lantmat_uuid' },
+  { name: 'pam_norwegian_adress_id',      newName: 'pam_norwegian_adress_id' }
 ];
 
 

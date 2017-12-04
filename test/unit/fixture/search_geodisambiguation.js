@@ -221,7 +221,15 @@ module.exports = {
           },
           'filter': {
             'bool': {
-              'must': []
+              'must': [
+                {
+                  'range': {
+                    'address_parts.pam_active_to': {
+                      'gte': 'now'
+                    }
+                  }
+                }
+              ]
             }
           }
         }

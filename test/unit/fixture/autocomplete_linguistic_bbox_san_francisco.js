@@ -62,6 +62,13 @@ module.exports = {
             'left': -122.51489
           }
         }
+      },
+      {
+        'range': {
+          'address_parts.pam_active_to': {
+            'gte': 'now'
+          }
+        }
       }]
     }
   },

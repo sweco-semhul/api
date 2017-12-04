@@ -139,6 +139,15 @@ module.exports = {
             'boost_mode': 'replace'
           }
         }
+      ],
+      'filter': [
+        {
+          'range': {
+            'address_parts.pam_active_to': {
+              'gte': 'now'
+            }
+          }
+        }
       ]
     }
   },

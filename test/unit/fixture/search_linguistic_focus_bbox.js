@@ -45,6 +45,13 @@ module.exports = {
                       'test'
                     ]
                   }
+                },
+                {
+                  'range': {
+                    'address_parts.pam_active_to': {
+                      'gte': 'now'
+                    }
+                  }
                 }
               ]
             }

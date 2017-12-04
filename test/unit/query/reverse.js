@@ -58,14 +58,15 @@ module.exports.tests.query = (test, common) => {
     t.deepEquals(query.body.score_functions, [
       'boundary_country view'
     ]);
-
+    
+    query.body.filter_functions.splice(-1,1);
     t.deepEquals(query.body.filter_functions, [
       'boundary_circle view',
       'sources view',
       'layers view',
       'categories view'
     ]);
-
+    
     t.deepEquals(query.body.sort_functions, [
       'sort_distance view'
     ]);

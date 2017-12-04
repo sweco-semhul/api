@@ -26,7 +26,20 @@ module.exports = {
                 }
               }
             }
-          ]
+          ],
+          'filter': {
+            'bool': {
+                'must': [
+                    {
+                        'range': {
+                            'address_parts.pam_active_to': {
+                                'gte': 'now'
+                            }
+                        }
+                    }
+                ]
+            }
+          }
         }
       },
       'max_boost': 20,

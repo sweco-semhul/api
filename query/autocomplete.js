@@ -52,7 +52,7 @@ query.score( peliasQuery.view.population( views.pop_subquery ) );
 query.filter( peliasQuery.view.sources );
 query.filter( peliasQuery.view.layers );
 query.filter( peliasQuery.view.boundary_rect );
-
+query.filter( function() { return { 'range': { 'address_parts.pam_active_to': { 'gte': 'now' }}}; });
 // --------------------------------
 
 /**

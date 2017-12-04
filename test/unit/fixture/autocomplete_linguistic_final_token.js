@@ -57,7 +57,16 @@ module.exports = {
             'weight': 3
           }]
         }
-      }]
+      }],
+      'filter': [
+        {
+          'range': {
+            'address_parts.pam_active_to': {
+              'gte': 'now'
+            }
+          }
+        }
+      ]
     }
   },
   'sort': [ '_score' ],
