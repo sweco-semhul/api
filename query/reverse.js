@@ -22,7 +22,7 @@ query.filter( peliasQuery.view.boundary_circle );
 query.filter( peliasQuery.view.sources );
 query.filter( peliasQuery.view.layers );
 query.filter( peliasQuery.view.categories );
-
+query.filter( function() { return { 'range': { 'address_parts.pam_active_to': { 'gte': 'now' }}}; });
 // --------------------------------
 
 function generateQuery( clean ){

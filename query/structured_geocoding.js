@@ -21,6 +21,7 @@ structuredQuery.filter( peliasQuery.view.boundary_rect );
 structuredQuery.filter( peliasQuery.view.sources );
 structuredQuery.filter( peliasQuery.view.layers );
 structuredQuery.filter( peliasQuery.view.categories );
+structuredQuery.filter( function() { return { 'range': { 'address_parts.pam_active_to': { 'gte': 'now' }}}; });
 // --------------------------------
 
 /**

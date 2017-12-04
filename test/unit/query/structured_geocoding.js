@@ -74,6 +74,7 @@ module.exports.tests.query = (test, common) => {
       'population_only_function view'
     ]);
 
+    query.body.filter_functions.splice(-1,1);
     t.deepEquals(query.body.filter_functions, [
       'boundary_country view',
       'boundary_circle view',

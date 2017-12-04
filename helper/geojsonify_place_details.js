@@ -57,7 +57,18 @@ const DETAILS_PROPS = [
   { name: 'marinearea_a',      type: 'string' },
   { name: 'bounding_box',      type: 'default' },
   { name: 'label',             type: 'string' },
-  { name: 'category',          type: 'array',     condition: checkCategoryParam }
+  { name: 'category',          type: 'array',     condition: checkCategoryParam },
+  { name: 'pam_address_category_id',      type: 'string' },
+  { name: 'pam_address_category',         type: 'string' },
+  { name: 'pam_active_from',              type: 'string' },
+  { name: 'pam_active_to',                type: 'string' },
+  { name: 'pam_household_type_id',        type: 'string' },
+  { name: 'pam_household_type',           type: 'string' },
+  { name: 'pam_is_internally_created',    type: 'string' },
+  { name: 'pam_danish_pain',              type: 'string' },
+  { name: 'pam_mod_adresse_adresse_idnr', type: 'string' },
+  { name: 'pam_lantmat_uuid',             type: 'string' },
+  { name: 'pam_norwegian_adress_id',      type: 'string' }
 ];
 
 // returns true IFF source a country_gid property

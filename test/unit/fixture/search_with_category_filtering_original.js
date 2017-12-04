@@ -75,6 +75,13 @@ module.exports = {
         'terms': {
           'category': ['retail', 'food']
         }
+      },
+      {
+        'range': {
+          'address_parts.pam_active_to': {
+            'gte': 'now'
+          }
+        }
       }]
     }
   },
