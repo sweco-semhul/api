@@ -31,7 +31,8 @@ USER 9999
 COPY ./pelias_docker.json ${WORK}/pelias.json
 
 ENV API_HOST_URL localhost
-ENV ENV=dev
+ENV ENV dev
+ENV API_VERSION snapshot
 ENV PELIAS_CONFIG ${WORK}/pelias.json
 
 
