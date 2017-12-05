@@ -5,8 +5,8 @@ var fs = require('fs');
 function setup(peliasConfig, markdownFile){
 
   var styleString = '<style>html{font-family:monospace}</style>';
-  var text = '# Pelias API\n';
-  text += '### Version: [' + peliasConfig.version + '](https://github.com/pelias/api/releases)\n';
+  var text = '# Postnord AIR API\n';
+  text += '### Version: ' + peliasConfig.version + '\n';
   text += fs.readFileSync( markdownFile, 'utf8');
   var html = styleString + markdown.toHTML(text);
 
